@@ -23,7 +23,7 @@ CHANGES
 * Updated instructions for updating the policy file for glance and nova services
 * Added policy files for glance and nova
 * Removed notifier code - not needed
-* Delete sios.sh
+* Delete rebac.sh
 * Update README.md
 * Updated policy files for glance and nova
 * Updated PDP to catch any exceptions and return False as a result
@@ -40,10 +40,10 @@ CHANGES
 * Cleaned up code and added nova policy
 * Add anonther exception
 * Exception Updated for Nova
-* add nova.py into sios/policy
+* add nova.py into rebac/policy
 * Updated to make calls glance specific
 * Update README.md
-* Glance policy can now enforce true/false from sios
+* Glance policy can now enforce true/false from rebac
 * Added PDP for glance
 * removed obsolete files
 * removed unneeded code
@@ -68,8 +68,8 @@ CHANGES
 * initial check in
 * initial login
 * initial commit
-* Updated name to sios
-* Updated glance to sios
+* Updated name to rebac
+* Updated glance to rebac
 * initial commit
 * Update file
 * Remove obsolete directory
