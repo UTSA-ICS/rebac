@@ -14,7 +14,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-"""Sios exception subclasses"""
+"""Rebac exception subclasses"""
 
 import six
 import six.moves.urllib.parse as urlparse
@@ -31,9 +31,9 @@ class RedirectException(Exception):
         self.url = urlparse.urlparse(url)
 
 
-class SiosException(Exception):
+class RebacException(Exception):
     """
-    Base Sios Exception
+    Base Rebac Exception
 
     To correctly use this class, inherit from it and define
     a 'message' property. That message will get printf'd
@@ -54,7 +54,7 @@ class SiosException(Exception):
                 # at least get the core message out if something happened
                 pass
         self.msg = message
-        super(SiosException, self).__init__(message)
+        super(RebacException, self).__init__(message)
 
     def __unicode__(self):
         # NOTE(flwang): By default, self.msg is an instance of Message, which
@@ -63,48 +63,48 @@ class SiosException(Exception):
         return six.text_type(self.msg)
 
 
-class MissingCredentialError(SiosException):
+class MissingCredentialError(RebacException):
     message = _("Missing required credential: %(required)s")
 
 
-class BadAuthStrategy(SiosException):
+class BadAuthStrategy(RebacException):
     message = _("Incorrect auth strategy, expected \"%(expected)s\" but "
                 "received \"%(received)s\"")
 
 
-class NotFound(SiosException):
+class NotFound(RebacException):
     message = _("An object with the specified identifier was not found.")
 
 
-class BadStoreUri(SiosException):
+class BadStoreUri(RebacException):
     message = _("The Store URI was malformed.")
 
 
-class Duplicate(SiosException):
+class Duplicate(RebacException):
     message = _("An object with the same identifier already exists.")
 
 
-class Conflict(SiosException):
+class Conflict(RebacException):
     message = _("An object with the same identifier is currently being "
                 "operated on.")
 
-class AuthBadRequest(SiosException):
+class AuthBadRequest(RebacException):
     message = _("Connect error/bad request to Auth service at URL %(url)s.")
 
 
-class AuthUrlNotFound(SiosException):
+class AuthUrlNotFound(RebacException):
     message = _("Auth service at URL %(url)s not found.")
 
 
-class AuthorizationFailure(SiosException):
+class AuthorizationFailure(RebacException):
     message = _("Authorization failed.")
 
 
-class NotAuthenticated(SiosException):
+class NotAuthenticated(RebacException):
     message = _("You are not authenticated.")
 
 
-class Forbidden(SiosException):
+class Forbidden(RebacException):
     message = _("You are not authorized to complete this action.")
 
 class PolicyNotAuthorized(Forbidden):
@@ -140,7 +140,7 @@ class ProtectedMetadefTagDelete(Forbidden):
                 " and cannot be deleted.")
 
 
-class Invalid(SiosException):
+class Invalid(RebacException):
     message = _("Data supplied was not valid.")
 
 
@@ -176,25 +176,25 @@ class ReservedProperty(Forbidden):
     message = _("Attribute '%(property)s' is reserved.")
 
 
-class AuthorizationRedirect(SiosException):
+class AuthorizationRedirect(RebacException):
     message = _("Redirecting to %(uri)s for authorization.")
 
 
-class ClientConnectionError(SiosException):
+class ClientConnectionError(RebacException):
     message = _("There was an error connecting to a server")
 
 
-class ClientConfigurationError(SiosException):
+class ClientConfigurationError(RebacException):
     message = _("There was an error configuring the client.")
 
 
-class MultipleChoices(SiosException):
+class MultipleChoices(RebacException):
     message = _("The request returned a 302 Multiple Choices. This generally "
                 "means that you have not included a version indicator in a "
                 "request URI.\n\nThe body of response returned:\n%(body)s")
 
 
-class LimitExceeded(SiosException):
+class LimitExceeded(RebacException):
     message = _("The request returned a 413 Request Entity Too Large. This "
                 "generally means that rate limiting or a quota threshold was "
                 "breached.\n\nThe response body:\n%(body)s")
@@ -205,7 +205,7 @@ class LimitExceeded(SiosException):
         super(LimitExceeded, self).__init__(*args, **kwargs)
 
 
-class ServiceUnavailable(SiosException):
+class ServiceUnavailable(RebacException):
     message = _("The request returned 503 Service Unavailable. This "
                 "generally occurs on service overload or other transient "
                 "outage.")
@@ -216,69 +216,69 @@ class ServiceUnavailable(SiosException):
         super(ServiceUnavailable, self).__init__(*args, **kwargs)
 
 
-class ServerError(SiosException):
+class ServerError(RebacException):
     message = _("The request returned 500 Internal Server Error.")
 
 
-class UnexpectedStatus(SiosException):
+class UnexpectedStatus(RebacException):
     message = _("The request returned an unexpected status: %(status)s."
                 "\n\nThe response body:\n%(body)s")
 
 
-class InvalidContentType(SiosException):
+class InvalidContentType(RebacException):
     message = _("Invalid content type %(content_type)s")
 
 
-class BadRegistryConnectionConfiguration(SiosException):
+class BadRegistryConnectionConfiguration(RebacException):
     message = _("Registry was not configured correctly on API server. "
                 "Reason: %(reason)s")
 
 
-class BadDriverConfiguration(SiosException):
+class BadDriverConfiguration(RebacException):
     message = _("Driver %(driver_name)s could not be configured correctly. "
                 "Reason: %(reason)s")
 
 
-class MaxRedirectsExceeded(SiosException):
+class MaxRedirectsExceeded(RebacException):
     message = _("Maximum redirects (%(redirects)s) was exceeded.")
 
 
-class InvalidRedirect(SiosException):
+class InvalidRedirect(RebacException):
     message = _("Received invalid HTTP redirect.")
 
 
-class NoServiceEndpoint(SiosException):
-    message = _("Response from Keystone does not contain a Sios endpoint.")
+class NoServiceEndpoint(RebacException):
+    message = _("Response from Keystone does not contain a Rebac endpoint.")
 
 
-class RegionAmbiguity(SiosException):
+class RegionAmbiguity(RebacException):
     message = _("Multiple 'image' service matches for region %(region)s. This "
                 "generally means that a region is required and you have not "
                 "supplied one.")
 
 
-class WorkerCreationFailure(SiosException):
+class WorkerCreationFailure(RebacException):
     message = _("Server worker creation failed: %(reason)s.")
 
 
-class SchemaLoadError(SiosException):
+class SchemaLoadError(RebacException):
     message = _("Unable to load schema: %(reason)s")
 
 
-class InvalidObject(SiosException):
+class InvalidObject(RebacException):
     message = _("Provided object does not match schema "
                 "'%(schema)s': %(reason)s")
 
 
-class UnsupportedHeaderFeature(SiosException):
+class UnsupportedHeaderFeature(RebacException):
     message = _("Provided header feature is unsupported: %(feature)s")
 
 
-class SIGHUPInterrupt(SiosException):
+class SIGHUPInterrupt(RebacException):
     message = _("System SIGHUP signal received.")
 
 
-class RPCError(SiosException):
+class RPCError(RebacException):
     message = _("%(cls)s exception was raised in the last rpc call: %(val)s")
 
 
@@ -433,7 +433,7 @@ class ArtifactInvalidPropertyParameter(Invalid):
     message = _("Cannot use this parameter with the operator %(op)s")
 
 
-class ArtifactLoadError(SiosException):
+class ArtifactLoadError(RebacException):
     message = _("Cannot load artifact '%(name)s'")
 
 
@@ -455,7 +455,7 @@ class ArtifactInvalidStateTransition(Invalid):
     message = _("Artifact state cannot be changed from %(curr)s to %(to)s")
 
 
-class JsonPatchException(SiosException):
+class JsonPatchException(RebacException):
     message = _("Invalid jsonpatch request")
 
 

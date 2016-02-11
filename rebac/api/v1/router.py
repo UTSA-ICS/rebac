@@ -22,7 +22,7 @@ from rebac.common import wsgi
 
 class API(wsgi.Router):
 
-    """WSGI router for SIOS v1 API requests."""
+    """WSGI router for REBAC v1 API requests."""
 
     def __init__(self, mapper):
 

@@ -1,12 +1,12 @@
 rebac
 ====
 
-SIOS PDP service for Openstack
+REBAC PDP service for Openstack
 
 This service will act as a Policy Decision Point (PDP) for any OpenStack service.<br>
-A OpenStack service's Policy Enforcement engine will make a REST call to SIOS PDP service for a Policy Decision.<br>
-The SIOS PDP service will always respond with a 'True' of 'False' as a result of the Policy Query.<br>
-In addition to the standard OpenStack HTTP headers, the follwing two HTTP headers are required by SIOS PDP api:<br>
+A OpenStack service's Policy Enforcement engine will make a REST call to REBAC PDP service for a Policy Decision.<br>
+The REBAC PDP service will always respond with a 'True' of 'False' as a result of the Policy Query.<br>
+In addition to the standard OpenStack HTTP headers, the follwing two HTTP headers are required by REBAC PDP api:<br>
 1. 'X-Action'<br>
 2. 'X-Target'
 
@@ -30,7 +30,7 @@ keystone service-create --type pdp --name rebac --description "PIP, PAP and PDP"
 wget -O /opt/stack/glance/glance/api/policy.py https://raw.github.com/fpatwa/rebac/master/external_service_policy_files/glance/policy.py<br>
 6.) Update the policy.py file for nova service to use rebac PDP api for Policy Decisions:<br>
 wget -O /opt/stack/nova/nova/policy.py https://raw.github.com/fpatwa/rebac/master/external_service_policy_files/nova/policy.py<br>
-7.) To start the SIOS service run the following commands:<br>
+7.) To start the REBAC service run the following commands:<br>
 cd /opt/stack; sudo pip install -e rebac<br>
 cd /opt/stack/rebac; /opt/stack/rebac/bin/rebac-api --config-file=/etc/rebac/rebac-api.conf || touch "/opt/stack/status/stack/rebac-api.failure"<br>
 8.) Restart nova api and glance api services (from screen)<br>

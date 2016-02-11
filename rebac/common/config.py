@@ -16,7 +16,7 @@
 #    under the License.
 
 """
-Routines for configuring Sios
+Routines for configuring Rebac
 """
 
 import logging
