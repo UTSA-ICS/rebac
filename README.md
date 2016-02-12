@@ -25,15 +25,11 @@ sudo chmod 777 /var/cache/rebac<br>
 keystone user-create --name rebac --pass admin --enabled true<br>
 keystone user-role-add --user rebac --role admin --tenant service<br>
 4.) Create a service called 'rebac' in Keystone<br>
-keystone service-create --type pdp --name rebac --description "PIP, PAP and PDP"<br>
-5.) Update the policy.py file for glance service to use rebac PDP api for Policy Decisions:<br>
-wget -O /opt/stack/glance/glance/api/policy.py https://raw.github.com/fpatwa/rebac/master/external_service_policy_files/glance/policy.py<br>
-6.) Update the policy.py file for nova service to use rebac PDP api for Policy Decisions:<br>
-wget -O /opt/stack/nova/nova/policy.py https://raw.github.com/fpatwa/rebac/master/external_service_policy_files/nova/policy.py<br>
-7.) To start the REBAC service run the following commands:<br>
+keystone service-create --type rebac --name rebac --description "Relationship based access control"<br>
+5.) To start the REBAC service run the following commands:<br>
 cd /opt/stack; sudo pip install -e rebac<br>
 cd /opt/stack/rebac; /opt/stack/rebac/bin/rebac-api --config-file=/etc/rebac/rebac-api.conf || touch "/opt/stack/status/stack/rebac-api.failure"<br>
-8.) Restart nova api and glance api services (from screen)<br>
+6.) Restart nova api and glance api services (from screen)<br>
 
 To Test Usage:
 ==============

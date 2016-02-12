@@ -18,7 +18,7 @@
 #    under the License.
 
 """
-Glance API Server
+Rebac API Server
 """
 
 import os
@@ -82,6 +82,7 @@ def main():
             osprofiler.web.disable()
 
         server = wsgi.Server()
+	print("Starting web server....")
         server.start(config.load_paste_app('rebac-api'), default_port=9292)
         server.wait()
     except KNOWN_EXCEPTIONS as e:

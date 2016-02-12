@@ -62,7 +62,7 @@ class Enforcer(policy.Enforcer):
            :param context: Rebac request context
            :param action: String representing the action to be checked
            :param target: Dictionary representing the object of the action.
-           :raises: `glance.common.exception.Forbidden`
+           :raises: `rebac.common.exception.Forbidden`
            :returns: A non-False value if access is allowed.
         """
         credentials = {

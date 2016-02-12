@@ -15,32 +15,20 @@
 #    under the License.
 
 """
-/PDP endpoint for Rebac v1 API
+/rebac endpoint for Rebac v1 API
 """
 
 import copy
 import eventlet
 from oslo_config import cfg
-from webob.exc import (HTTPError,
-                       HTTPNotFound,
-                       HTTPConflict,
-                       HTTPBadRequest,
-                       HTTPForbidden,
-                       HTTPRequestEntityTooLarge,
-                       HTTPInternalServerError,
-                       HTTPServiceUnavailable)
-from webob import Response
-from rebac.api import policy
-import rebac.api.v1
-from rebac.common import exception
-from rebac.common import utils
-from rebac.common import wsgi
-from oslo_utils import strutils
 import oslo_log.log as logging
-from rebac.i18n import _
-# Import db here
-from rebac.db import sql
 import uuid
+
+from rebac.common import wsgi
+from rebac.common import exception
+from rebac.i18n import _
+from rebac.db import sql
+from rebac.api import policy
 
 relationship ={}
 sourcefilename ={} 

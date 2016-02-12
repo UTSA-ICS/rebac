@@ -23,10 +23,7 @@ from oslo_utils import excutils
 from oslo_utils import timeutils
 import six
 import webob
-
-from glance.common import exception
-from glance.common import utils
-from glance import i18n
+from rebac import i18n
 
 _ = i18n._
 _LE = i18n._LE
@@ -50,12 +47,7 @@ CONF.register_opts(notifier_opts)
 
 LOG = logging.getLogger(__name__)
 
-_ALIASES = {
-    'glance.openstack.common.rpc.impl_kombu': 'rabbit',
-    'glance.openstack.common.rpc.impl_qpid': 'qpid',
-    'glance.openstack.common.rpc.impl_zmq': 'zmq',
-}
-
+_ALIASES = { } 
 
 def get_transport():
     return oslo_messaging.get_transport(CONF, aliases=_ALIASES)

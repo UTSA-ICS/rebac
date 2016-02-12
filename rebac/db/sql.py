@@ -13,7 +13,6 @@
 # under the License.
 
 from oslo_config import cfg
-from rebac.common import utils
 from rebac.common import exception
 from rebac.i18n import _
 from rebac.common import sql

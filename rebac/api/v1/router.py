@@ -15,8 +15,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from rebac.api.v1 import pdp
-from rebac.api.v1 import rebac
+from rebac.api.v1 import controller
 from rebac.common import wsgi
 
 
@@ -26,21 +25,7 @@ class API(wsgi.Router):
 
     def __init__(self, mapper):
 
-        pdp_resource = pdp.create_resource()
-        mapper.connect('/pdp/check_glance',
-                       controller=pdp_resource,
-                       action='check_glance',
-                       conditions={'method': ['POST']})
-        mapper.connect('/pdp/enforce_glance',
-                       controller=pdp_resource,
-                       action='enforce_glance',
-                       conditions={'method': ['POST']})
-        mapper.connect('/pdp/enforce_nova',
-                       controller=pdp_resource,
-                       action='enforce_nova',
-                       conditions={'method': ['POST']})
-
-        rebac_resource = rebac.create_resource()
+        rebac_resource = controller.create_resource()
         mapper.connect('/rebac/create_object_acl',
                        controller=rebac_resource,
                        action='create_object_acl',
@@ -49,4 +34,5 @@ class API(wsgi.Router):
                        controller=rebac_resource,
                        action='get_object_acl',
                        conditions={'method': ['GET']})
+
         super(API, self).__init__(mapper)

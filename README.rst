@@ -7,5 +7,5 @@ retrieving and storing virtual machine images.
 
 Use the following resources to learn more:
 
-* `Official Rebac documentation <http://docs.openstack.org/developer/sios/>`_
-* `Official Client documentation <http://docs.openstack.org/developer/python-siosclient/>`_
+* `Official Rebac documentation <http://docs.openstack.org/developer/rebac`_
+* `Official Client documentation <http://docs.openstack.org/developer/python-rebacclient/>`_
