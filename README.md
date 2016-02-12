@@ -29,9 +29,7 @@ keystone service-create --type rebac --name rebac --description "Relationship ba
 5.) To start the REBAC service run the following commands:<br>
 cd /opt/stack; sudo pip install -e rebac<br>
 cd /opt/stack/rebac; /opt/stack/rebac/bin/rebac-api --config-file=/etc/rebac/rebac-api.conf || touch "/opt/stack/status/stack/rebac-api.failure"<br>
-6.) Restart nova api and glance api services (from screen)<br>
+6.) Verify rebac service running in screen<br>
 
 To Test Usage:
 ==============
-- Run nova commands (e.g. nova list)
-- Run glance commands (e.g glance image-list)
