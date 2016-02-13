@@ -22,6 +22,6 @@ CONF = cfg.CONF
 
 
 def root_app_factory(loader, global_conf, **local_conf):
-    if not CONF.enable_v1_api:
-        del local_conf['/v1']
+    if not CONF.enable_api:
+        del local_conf['/']
     return paste.urlmap.urlmap_factory(loader, global_conf, **local_conf)

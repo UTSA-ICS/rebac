@@ -15,7 +15,7 @@
 #    under the License.
 
 """
-/rebac endpoint for Rebac v1 API
+/rebac endpoint for Rebac API
 """
 
 import copy
@@ -42,7 +42,7 @@ LOG = logging.getLogger(__name__)
 
 class Controller(object):
     """
-    WSGI controller for Policy Decision Point in Rebac v1 API
+    WSGI controller for Policy Decision Point in Rebac API
 
     The PDP resource API is a RESTful web service for Policy Decisions. The API
     is as follows::

@@ -47,8 +47,8 @@ paste_deploy_opts = [
 ]
 
 common_opts = [
-    cfg.BoolOpt('enable_v1_api', default=True,
-                help=_("Deploy the v1 OpenStack API.")),
+    cfg.BoolOpt('enable_api', default=True,
+                help=_("Deploy the OpenStack API.")),
     cfg.StrOpt('pydev_worker_debug_host',
                help=_('The hostname/IP of the pydev process listening for '
                       'debug connections')),

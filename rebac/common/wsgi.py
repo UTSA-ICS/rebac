@@ -657,7 +657,7 @@ class Router(object):
           # Pointing to an arbitrary WSGI app.  You can specify the
           # {path_info:.*} parameter so the target app can be handed just that
           # section of the URL.
-          mapper.connect(None, "/v1.0/{path_info:.*}", controller=BlogApp())
+          mapper.connect(None, "/{path_info:.*}", controller=BlogApp())
         """
         mapper.redirect("", "/")
         self.map = mapper

@@ -15,13 +15,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from rebac.api.v1 import controller
+from rebac.api import controller
 from rebac.common import wsgi
 
 
 class API(wsgi.Router):
 
-    """WSGI router for REBAC v1 API requests."""
+    """WSGI router for REBAC API requests."""
 
     def __init__(self, mapper):
 
