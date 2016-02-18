@@ -30,11 +30,6 @@ from rebac.i18n import _
 from rebac.db import sql
 from rebac.api import policy
 
-relationship ={}
-sourcefilename ={} 
-targetfilelist ={}
-targetuserlist ={}
-acl = {}
 
 CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
@@ -56,21 +51,32 @@ class Controller(object):
       self.ACL = sql.ACLOperation()
       self.relationship = sql.RelationshipOperation()
 
-    def create_relationship(self, relationship):
-     sourcefilename['cloudname'] = 'c1'
-     sourcefilename['accountname'] = 'a1'
-     sourcefilename['containername'] = 'con1'
-     sourcefilename['filename'] = 'a1'
+    def user_authorized(self, req):
+      #user = req.user
+      #target_file = req.file
+      # logic to check if user is allowed to access the file
+      # If allowed then return true
+      return False
+       
+
+    def create_relationship(self, req):
+
+     sourcefile = {} 
+     sourcefile['cloudname'] = 'c1'
+     sourcefile['accountname'] = 'a1'
+     sourcefile['containername'] = 'con1'
+     sourcefile['filename'] = 'a1'
+
+     targetfilelist = {}
      targetfilelist['cloudname']= 'tc1'
      targetfilelist['accountname']='ta1'
      targetfilelist['containername']= 'tcon1'
      targetfilelist['filename'] ='tf1'
 
-
+     relationship ={}
      relationship['id'] = uuid.uuid4().hex
-     relationship['sourcefile']= sourcefilename
-     relationship['targetfilelist']= targetfilelist 
-     
+     relationship['sourcefile']= str(sourcefile)
+     relationship['targetfilelist']= str(targetfilelist)
 
      return relationship.create_relationship(relationship['id'],relationship)
 
@@ -79,19 +85,28 @@ class Controller(object):
       return ref
 
     # Test this
-    def create_object_acl(self, req):
-     sourcefilename['cloudname'] = "c1"
-     sourcefilename['accountname'] = "a1"
-     sourcefilename['containername'] = "con1"
-     sourcefilename['filename'] = "a1"
-     targetuserlist['cloudname']= "tuc1"
-     targetuserlist['accountname']="tua1"
-     targetuserlist['containername']= "ucon1"
-     targetuserlist['user_id'] ="tf1"
+    def create_object_acl(self, req, body):
+
+     print("My Req is --> ", req)
+     print("My Req is --> ", body)
+
+     sourcefile = {}
+     sourcefile['cloudname'] = body['sourcefile']['acl']
+     sourcefile['accountname'] = 
+     sourcefile['containername'] = 
+     sourcefile['filename'] = "a1"
+
+     userlist = {}
+     userlist['cloudname']= "tuc1"
+     userlist['accountname']="tua1"
+     userlist['containername']= "ucon1"
+     userlist['user_id'] ="tf1"
     
+     acl = {}
      acl['id'] = uuid.uuid4().hex
-     acl['sourcefile']= str(sourcefilename)
-     acl['userlist']= str(targetuserlist)
+     acl['sourcefile']= str(sourcefile)
+     acl['userlist']= str(userlist)
+
      print("MyACL is --> ", acl)
 
      return self.ACL.create_acl(acl['id'],acl)
@@ -100,11 +115,6 @@ class Controller(object):
     def get_object_acl(self, acl_id):
       ref= acl.get_acl(acl_id)
       return ref
-
-    #def update_relationship():
-    #def delete_relationship():
-    #def update_object_acl():
-    #def delete_object_acl():
 
 
 class Deserializer(wsgi.JSONRequestDeserializer):

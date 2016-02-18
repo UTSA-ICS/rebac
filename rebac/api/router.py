@@ -34,5 +34,9 @@ class API(wsgi.Router):
                        controller=rebac_resource,
                        action='get_object_acl',
                        conditions={'method': ['GET']})
+        mapper.connect('/rebac/user_authorized',
+                       controller=rebac_resource,
+                       action='user_authorized',
+                       conditions={'method': ['GET']})
 
         super(API, self).__init__(mapper)
