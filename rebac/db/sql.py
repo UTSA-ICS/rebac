@@ -50,28 +50,29 @@ class RelationshipOperation():
       session.add(relationship_ref)
       return  relationship_ref.to_dict()
 
-  def get_relationship_by_sourcefilename(self,sourcefilename):
+  def _get_relationship(self, sourcefilename):
     session = sql.get_session()
     query = session.query(Relationship)
     query = query.filter_by(sourcefile=sourcefilename)
     try:
       relationship_ref = query.one()
+      return relationship_ref
     except sql.NotFound:
-      raise exception.UserNotFound(id=id)
+      raise exception.NotFound(sourcefilename)
+
+  def get_relationship_by_sourcefilename(self,sourcefilename):
+    relationship_ref = self._get_relationship(sourcefilename)
     return relationship_ref.to_dict()
 
-  def delete_reltionship(self,sourcefilename):
+  def delete_relationship(self,sourcefilename):
     session = sql.get_session()
     with session.begin():
-      ref = self._get_relationship_by_sourcefilename(session, sourcefilename)
-      q = session.query(Relationship)
-      q = q.filter_by(id=id)
-      q.delete(False)
+      ref = self._get_relationship(sourcefilename)
       session.delete(ref)
 
 class ACLOperation():
   def __init__(self):
-    print("ACLOperation")
+    print("ACL")
 
   def is_sql(self):
     return True
@@ -83,30 +84,26 @@ class ACLOperation():
       session.add(acl_ref)
       return  acl_ref.to_dict()
 
-  def _get_acl(self, session, acl_id):
-    ref = session.query(ACL).get(acl_id)
-    if not ref:
-      raise exception.UserNotFound(acl_id=acl_id)
-    return ref
+  def _get_acl(self, sourcefilename):
+    session = sql.get_session()
+    query = session.query(ACL)
+    query = query.filter_by(sourcefile=sourcefilename)
+    try:
+      acl_ref = query.one()
+      return acl_ref
+    except sql.NotFound:
+      raise exception.NotFound(sourcefilename)
 
   def get_acl(self, acl_id):
     session = sql.get_session()
     return identity.filter_user(self._get_acl(session, acl_id).to_dict())
 
   def get_acl_by_name(self,sourcefilename):
-    session = sql.get_session()
-    query = session.query(ACL)
-    query = query.filter_by(sourcefile=sourcefilename)
-    try:
-      acl_ref = query.one()
-    except sql.NotFound:
-      raise exception.UserNotFound()
+    acl_ref = self._get_acl(sourcefilename)
     return acl_ref.to_dict()
 
-  def delete_acl(self,sourcefilename):
+  def delete_acl(self, sourcefilename):
     session = sql.get_session()
     with session.begin():
-      ref = self._get_acl_by_sourcefilename(session, sourcefilename)
-      q = session.query(ACL)
-      q = q.filter_by(id=id)
-      q.delete(False)
+      ref = self._get_acl(sourcefilename)
+      session.delete(ref) 

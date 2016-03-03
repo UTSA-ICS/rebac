@@ -26,9 +26,12 @@ import uuid
 
 from rebac.common import wsgi
 from rebac.common import exception
-from rebac.i18n import _
 from rebac.db import sql
 from rebac.api import policy
+from rebac import i18n
+from rebac.i18n import _
+_LI = i18n._LI
+_LE = i18n._LE
 
 
 CONF = cfg.CONF
@@ -49,86 +52,118 @@ class Controller(object):
     # User CRUD
     def __init__(self):
       self.ACL = sql.ACLOperation()
-      self.relationship = sql.RelationshipOperation()
+      self.Relation = sql.RelationshipOperation()
 
     def user_authorized(self, req):
-      #user = req.user
-      #target_file = req.file
-      # logic to check if user is allowed to access the file
-      # If allowed then return true
       return False
-       
 
-    def create_relationship(self, req):
+    def create_relationship(self, req, body):
+      relationship ={}
+      relationship['id'] = uuid.uuid4().hex
+      relationship['sourcefile']= str(body['relationship']['sourcefile'])
+      relationship['targetfilelist']= str(body['relationship']['targetfilelist'])
+      return self.Relation.create_relationship(relationship['id'],relationship)
 
-     sourcefile = {} 
-     sourcefile['cloudname'] = 'c1'
-     sourcefile['accountname'] = 'a1'
-     sourcefile['containername'] = 'con1'
-     sourcefile['filename'] = 'a1'
+    def get_relationship(self, req, body):
+      try:
+        return self.Relation.get_relationship_by_sourcefilename(str(body['sourcefilename']))
+      except exception.NotFound as e:
+        msg = _("The Specified Relationship [%s] is Not Found") % e.message
+        LOG.info(msg)
+        return null;
 
-     targetfilelist = {}
-     targetfilelist['cloudname']= 'tc1'
-     targetfilelist['accountname']='ta1'
-     targetfilelist['containername']= 'tcon1'
-     targetfilelist['filename'] ='tf1'
+    def delete_relationship(self, req, body):
+      self.Relation.delete_relationship(str(body['sourcefilename']))
+      return True
 
-     relationship ={}
-     relationship['id'] = uuid.uuid4().hex
-     relationship['sourcefile']= str(sourcefile)
-     relationship['targetfilelist']= str(targetfilelist)
-
-     return relationship.create_relationship(relationship['id'],relationship)
-
-    def get_relationship(self, sourceFilename):
-      ref = relationship.get_relationship(sourcefilename)
-      return ref
-
-    # Test this
     def create_object_acl(self, req, body):
+      acl = {}
+      acl['id'] = uuid.uuid4().hex
+      acl['sourcefile']= str(body['acl']['sourcefilename'])
+      acl['userlist']= str(body['acl']['userlist'])
 
-     print("My Req is --> ", req)
-     print("My Req is --> ", body)
-
-     sourcefile = {}
-     sourcefile['cloudname'] = body['sourcefile']['acl']
-     sourcefile['accountname'] = 
-     sourcefile['containername'] = 
-     sourcefile['filename'] = "a1"
-
-     userlist = {}
-     userlist['cloudname']= "tuc1"
-     userlist['accountname']="tua1"
-     userlist['containername']= "ucon1"
-     userlist['user_id'] ="tf1"
-    
-     acl = {}
-     acl['id'] = uuid.uuid4().hex
-     acl['sourcefile']= str(sourcefile)
-     acl['userlist']= str(userlist)
-
-     print("MyACL is --> ", acl)
-
-     return self.ACL.create_acl(acl['id'],acl)
+      print("MyACL is --> ", str(body['acl']))
+      return self.ACL.create_acl(acl['id'],acl)
 
     # Test this
-    def get_object_acl(self, acl_id):
-      ref= acl.get_acl(acl_id)
-      return ref
+    def get_object_acl(self, req, body):
+      try: 
+        ref= self.ACL.get_acl_by_name(str(body['sourcefilename']))
+        return ref
+      except exception.NotFound as e:
+        msg = _("The Specified ACL [%s] is Not Found") % e.message
+	LOG.info(msg)
+	return False;
+    
+    def delete_object_acl(self, req, body):
+      return self.ACL.delete_acl(str(body['sourcefilename'])) 
 
+    def _allowAccessThroughRelationship(self, userName, fileName):
+      try:
+	ref = self.Relation.get_relationship_by_sourcefilename(fileName)
+      except exception.NotFound as e:
+        msg = _("The Specified Relationship [%s] is Not Found") % e.message
+        LOG.info(msg)
+        return False;
+
+      FileList= ref['targetfilelist'].split(',')
+      print(FileList)
+      for linkedFile in FileList:
+	      print('Linked File:'+ linkedFile)
+      	      if linkedFile in FileAlreadyVisited:
+                 continue
+      	      else:
+                 FileAlreadyVisited.append(linkedFile)
+                 if allowAccessThroughACL(userName, linkedFile):
+                    return True
+                 else:
+                    return allowAccessThroughRelationship(userName, linkedFile)
+      return False
+
+
+    def _allowAccessThroughACL(self, userName, fileName):
+         try:
+           ref = self.ACL.get_acl_by_name(fileName) 
+         except exception.NotFound as e:
+           msg = _("The Specified ACL [%s] is Not Found") % e.message
+           LOG.info(msg)
+           return False;
+
+         if userName in ref['userlist']:
+            return True
+         else:
+            return False
+      
+    def authorize_access(self, req, body): 
+       print("Checking ACL Status")
+       ACLStatus = self._allowAccessThroughACL(str(body['username']), str(body['sourcefilename']))
+
+       if ACLStatus :
+          print(str(body['username']),'is allowed to Access', str(body['sourcefilename']), 'through ACL')
+          return True 
+       else:
+          print(str(body['username']), 'not allowed to access',str(body['sourcefilename']), 'through ACL')
+          ReBACStatus = self._allowAccessThroughRelationship(str(body['username']), str(body['sourcefilename']))
+
+       if ReBACStatus:
+          print(str(body['username']),'is allowed to access', str(body['sourcefilename']),'through relationship')
+          return True
+       else:
+          print(str(body['username']),'is not allowed to access',str(body['sourcefilename']),'through relationship')
+          return False
 
 class Deserializer(wsgi.JSONRequestDeserializer):
     """Handles deserialization of specific controller method requests."""
 
     def _deserialize(self, request):
-        result = {}
-        return result
+       result = {}
+       return result
 
     def create(self, request):
-        return self._deserialize(request)
+       return self._deserialize(request)
 
     def update(self, request):
-        return self._deserialize(request)
+       return self._deserialize(request)
 
 
 class Serializer(wsgi.JSONResponseSerializer):
@@ -144,10 +179,10 @@ class Serializer(wsgi.JSONResponseSerializer):
         return response
 
     def update(self, response, result):
-       return response
+        return response
 
     def create(self, response, result):
-       return response
+        return response
 
 
 def create_resource():

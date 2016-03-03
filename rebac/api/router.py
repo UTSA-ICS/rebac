@@ -26,6 +26,19 @@ class API(wsgi.Router):
     def __init__(self, mapper):
 
         rebac_resource = controller.create_resource()
+        mapper.connect('/rebac/create_relationship',
+                       controller=rebac_resource,
+                       action='create_relationship',
+                       conditions={'method': ['POST']})
+        mapper.connect('/rebac/get_relationship',
+                       controller=rebac_resource,
+                       action='get_relationship',
+                       conditions={'method': ['GET']})
+        mapper.connect('/rebac/delete_relationship',
+                       controller=rebac_resource,
+                       action='delete_relationship',
+                       conditions={'method': ['DELETE']})
+        #
         mapper.connect('/rebac/create_object_acl',
                        controller=rebac_resource,
                        action='create_object_acl',
@@ -33,6 +46,14 @@ class API(wsgi.Router):
         mapper.connect('/rebac/get_object_acl',
                        controller=rebac_resource,
                        action='get_object_acl',
+                       conditions={'method': ['GET']})
+        mapper.connect('/rebac/delete_object_acl',
+                       controller=rebac_resource,
+                       action='delete_object_acl',
+                       conditions={'method': ['DELETE']})
+        mapper.connect('/rebac/authorize_access',
+                       controller=rebac_resource,
+                       action='authorize_access',
                        conditions={'method': ['GET']})
         mapper.connect('/rebac/user_authorized',
                        controller=rebac_resource,
