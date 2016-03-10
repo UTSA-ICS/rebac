@@ -134,9 +134,6 @@ class Controller(object):
          else:
             return False
       
-    def authorize_access(self, req): 
-       print("Checking ACL Status --- NO BODY")
-   
     def authorize_access(self, req, body): 
        print("Checking ACL Status")
        ACLStatus = self._allowAccessThroughACL(str(body['username']), str(body['sourcefilename']))
